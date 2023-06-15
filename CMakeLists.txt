@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(idf_as_lib CXX)
+project(hello-world CXX)
 
 option(TARGET "ESP-IDF friendly target" "esp32")
 
