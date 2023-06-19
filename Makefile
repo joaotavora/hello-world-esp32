@@ -1,6 +1,6 @@
 DEVICE=/dev/ttyUSB0
 TARGET=esp32
-IDF_PATH=/opt/esp-idf
+export IDF_PATH=/opt/esp-idf
 IDF_INSTALLED=$(HOME)/.espressif
 
 export PATH := $(IDF_PATH)/tools$\

@@ -27,7 +27,7 @@ More or less from 0 on an Arch Linux system.  First install the
 "Espressif IoT Development Framework", aka ESP-IDF from AUR (Archlinux
 User Repository).  You could install it from anywhere else, I suppose.
 
-```
+```bash
 git clone https://aur.archlinux.org/esp-idf.git
 cd esp-idf
 makepkg -sir
@@ -37,15 +37,23 @@ Now, you must further ask the framework to download and install the
 _toolchain_, via `pip` and a lot of Python I think.  It will be
 installed in your `$HOME/.espressif`, which is not terrible.
 
-Now install some standard tools
+To do that:
 
+```bash
+cd /opt/esp-idf
+./install.sh
 ```
-sudo pacman -S cmake ccache clangd
+
+Now install some standard tools (here, `clang` is just so you get the
+useful `clangd` LSP tool)
+
+```bash
+sudo pacman -S cmake ccache clang
 ```
 
 On Arch you need to add your user to the `uucp` group:
 
-```
+```bash
 sudo usermod -a -G uucp $USER
 ```
 
@@ -57,13 +65,13 @@ probably your chip is connected to.
 
 Finally, clone this repository
 
-```
+```bash
 git clone https://github.com/joaotavora/hello-world-esp32
 ```
 
 Now pray to your favourite deity:
 
-```
+```bash
 cd hello-world-esp32
 make configure build flash monitor
 ```
