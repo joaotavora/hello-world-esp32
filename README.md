@@ -40,8 +40,7 @@ installed in your `$HOME/.espressif`, which is not terrible.
 To do that:
 
 ```bash
-cd /opt/esp-idf
-./install.sh
+/opt/esp-idf/install.sh
 ```
 
 Now install some standard tools (here, `clang` is just so you get the
@@ -60,9 +59,6 @@ sudo usermod -a -G uucp $USER
 This should give you permissions to `/dev/ttyUSB0` which is where
 probably your chip is connected to.
 
-
-
-
 Finally, clone this repository
 
 ```bash
@@ -74,6 +70,14 @@ Now pray to your favourite deity:
 ```bash
 cd hello-world-esp32
 make configure build flash monitor
+```
+
+Didn't work?? Sometimes it seems that explicitly installing some more
+Python modules is necessary (it shouldn't be, though, maybe
+something's off with `PYTHONPATH`).
+
+```bash
+pip install kconfiglib idf_component_manager esptool
 ```
 
 ### Interesting
