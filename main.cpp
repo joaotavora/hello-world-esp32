@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 
-// FIXME: shouldn't be needed -
-// #/opt/esp-idf/components/esp_hw_support/include/ should include it!
-#include "esp_attr.h"
 #include <cstdio>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
