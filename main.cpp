@@ -11,10 +11,12 @@
 #include "esp_system.h"
 #include "esp_flash.h"
 
-extern "C" void app_main(void);
+namespace greeter {
+  void greet_and_reboot();
+}
 
-void app_main(void){
-    printf("Hello world!\n");
+void greeter::greet_and_reboot() {
+  printf("Hello world!\n");
 
     /* Print chip information */
     esp_chip_info_t chip_info;
@@ -43,4 +45,9 @@ void app_main(void){
     printf("Restarting now.\n");
     fflush(stdout);
     esp_restart();
+}
+
+
+extern "C" void app_main(void) {
+  greeter::greet_and_reboot();
 }
