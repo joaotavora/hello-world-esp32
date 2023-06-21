@@ -1,0 +1,3 @@
+namespace blinky {
+  void blinky();
+}
