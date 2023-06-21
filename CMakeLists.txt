@@ -31,7 +31,7 @@ if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     BUILD_DIR ${CMAKE_BINARY_DIR})
 
   set(elf_file ${CMAKE_PROJECT_NAME}.elf)
-  add_executable(${elf_file} ./src/${main_component}/main.cpp)
+  add_executable(${elf_file} ./src/${main_component}/main/main.cpp)
 
   idf_build_get_property(component_aliases BUILD_COMPONENT_ALIASES)
   message(STATUS "HEYHEY: Linking main executable to: ${component_aliases}")
