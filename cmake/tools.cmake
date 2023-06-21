@@ -56,3 +56,6 @@ endif()
 if(USE_CCACHE)
   CPMAddPackage("gh:TheLartians/Ccache.cmake@1.2.3")
 endif()
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+

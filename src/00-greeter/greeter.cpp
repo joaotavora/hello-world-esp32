@@ -34,7 +34,7 @@ void greeter::greet_and_reboot() {
     }
     // clangd still doesn't know about this
     static_assert(sizeof(long) == 4);
-    printf("%luMB %s flash\n", flash_size / (1024 * 1024),
+    printf("%luMB %s flash\n", static_cast<unsigned long>(flash_size / (1024 * 1024)),
             (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
     for (int i = 10; i >= 0; i--) {
