@@ -1,3 +1,0 @@
-namespace blinky {
-  void blinky();
-}
