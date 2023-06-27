@@ -23,7 +23,7 @@ if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   assert(TARGET "Need A TARGET!")
   idf_build_process("${TARGET}"
     COMPONENTS freertos esptool_py ${main_component}
-    SDKCONFIG ${CMAKE_CURRENT_LIST_DIR}/sdkconfig
+    SDKCONFIG_DEFAULTS ${CMAKE_SOURCE_DIR}/sdkconfig.defaults
     BUILD_DIR ${CMAKE_BINARY_DIR})
 
   set(elf_file ${CMAKE_PROJECT_NAME}.elf)
