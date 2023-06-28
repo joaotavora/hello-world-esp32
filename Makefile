@@ -37,3 +37,6 @@ monitor: build
 
 clean:
 	rm -rf build*
+
+compile_commands.json:
+	ln -sf build/compile_commands.json compile_commands.json
