@@ -5,6 +5,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <chrono>
 
 #include "freertos/portmacro.h"
 
@@ -14,8 +15,12 @@ namespace frpp {
 
   public:
     explicit task(TaskHandle_t rawtask) : p_(rawtask) {}
+    void suspend() { vTaskSuspend(p_); }
+    void resume() { vTaskResume(p_); }
+    void del() { vTaskDelete(p_); p_ = nullptr;}
     ~task() {
-      vTaskDelete(p_);  // not sure I can even do this
+      std::cerr << "About to delete it\n" << std::endl;
+      if (p_) del();
     }
   };
 
@@ -41,9 +46,16 @@ namespace frpp {
     auto retval = xTaskCreatePinnedToCore(fun, name.c_str(), stack_depth, ptr,
                                           priority, &rawtask, 1);
     if (!retval) {
-      delete ptr;
+      delete ptr; 
       throw std::runtime_error("xTaskCreate() failed!");
     }
     return task(rawtask);
+  }
+
+  template< class Rep, class Period >
+
+  void sleep_for(const std::chrono::duration<Rep, Period>& sleep_duration) {
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(sleep_duration);
+    vTaskDelay(ms.count()/portTICK_PERIOD_MS);
   }
 }  // namespace frpp
