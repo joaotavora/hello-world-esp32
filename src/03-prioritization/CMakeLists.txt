@@ -1,1 +1,1 @@
-idf_component_register(REQUIRES frpp driver)
+idf_component_register(REQUIRES frpp)
