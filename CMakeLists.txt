@@ -14,7 +14,7 @@ foreach (comp ${my_components})
 endforeach()
 
 if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  set(main_component "01-blinky")
+  set(main_component "03-prioritization")
 
   idf_component_get_property(requires ${main_component} REQUIRES)
   message(STATUS "Main component's '${main_component}' requires: ${requires}")
