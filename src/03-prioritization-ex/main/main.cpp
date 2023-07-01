@@ -1,7 +1,6 @@
 #include "frpp/frpp.h"
 #include <chrono>
 #include <cstddef>
-#include <iostream>
 #include <string>
 #include "driver/gpio.h"
 #include "driver/uart.h"
@@ -33,8 +32,8 @@ esp_err_t example_configure_stdin_stdout(void)
 
 extern "C" void app_main(void) {
   static const auto BLINK_GPIO = GPIO_NUM_2;
-  example_configure_stdin_stdout();
 
+  example_configure_stdin_stdout();
   gpio_reset_pin(BLINK_GPIO);
   /* Set the GPIO as a push/pull output */
   gpio_set_direction(BLINK_GPIO, GPIO_MODE_OUTPUT);
@@ -53,10 +52,11 @@ extern "C" void app_main(void) {
 
   std::size_t period;
 
-  std::cout << "Prompt: ";
-  while (std::cin >> period) {
-    std::cout << "New period (in ms): '" << period << "'\nPrompt: ";
+  printf("Period: ");
+
+  while (fscanf(stdin, "%ud", &period)) {
+    printf("New period (in ms): %ud\nPeriod: ", period);
     blink_period = std::chrono::milliseconds{period};
   }
-  std::cout << "Bye bye!";
+  printf("Bye bye!");
 }

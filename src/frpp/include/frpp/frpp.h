@@ -1,7 +1,6 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
-#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -19,7 +18,6 @@ namespace frpp {
     void resume() { vTaskResume(p_); }
     void del() { vTaskDelete(p_); p_ = nullptr;}
     ~task() {
-      std::cerr << "About to delete it\n" << std::endl;
       if (p_) del();
     }
   };
@@ -37,16 +35,14 @@ namespace frpp {
             static_cast<Callable_decay_t*>(cookie)};
         (*pf)();
       } catch (std::exception& e) {
-        std::cerr << "Task '" << pcTaskGetName(xTaskGetCurrentTaskHandle())
-                  << "'"
-                  << " caught '" << e.what() << "'" << std::endl;
+        fprintf(stderr, "Task '%s' caught '%s'\n", pcTaskGetName(xTaskGetCurrentTaskHandle()), e.what());
       }
       vTaskDelete(NULL);
     };
     auto retval = xTaskCreatePinnedToCore(fun, name.c_str(), stack_depth, ptr,
                                           priority, &rawtask, 1);
     if (!retval) {
-      delete ptr; 
+      delete ptr;
       throw std::runtime_error("xTaskCreate() failed!");
     }
     return task(rawtask);
