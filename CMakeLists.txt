@@ -31,5 +31,6 @@ if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
   idf_build_get_property(component_aliases BUILD_COMPONENT_ALIASES)
   target_link_libraries(${elf_file} idf::freertos idf::spi_flash ${component_aliases})
+  target_compile_options(${elf_file} PRIVATE -fno-rtti)
   idf_build_executable(${elf_file})
 endif()
