@@ -53,7 +53,9 @@ namespace frpp {
       }
       detail::delete_current_task();
     };
-    return task(detail::create(fun, name, stack_size, ptr.get(), priority, 1));
+    auto retval=task(detail::create(fun, name, stack_size, ptr.get(), priority, 1));
+    ptr.release();
+    return retval;
   }
 
   void sleep_for_ticks(std::size_t ticks);
