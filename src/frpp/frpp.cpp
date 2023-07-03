@@ -23,12 +23,12 @@ namespace frpp {
       xTaskCreatePinnedToCore(fun,
                               name.c_str(),
                               stack_size, cookie,
-                              1, &raw_handle, affinity);
+                              priority, &raw_handle, affinity);
     } else {
       xTaskCreate(fun,
                   name.c_str(),
                   stack_size, cookie,
-                  1, &raw_handle);
+                  priority, &raw_handle);
     }
     return raw_handle;
   }

@@ -45,7 +45,7 @@ extern "C" void app_main(void) {
     while (true) {
       gpio_set_level(BLINK_GPIO, s_led_state);
       s_led_state = !s_led_state;
-      frpp::sleep_for(std::max(blink_period/2, 100ms));
+      frpp::sleep_for(blink_period/2);
     }
   });
 

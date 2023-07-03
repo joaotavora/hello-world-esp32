@@ -37,7 +37,7 @@ namespace frpp {
 
 
   template <class Callable>
-  [[nodiscard]] task async(Callable&& f, size_t priority = 1,
+  [[nodiscard]] task async(Callable&& f, size_t priority = 0,
                            const std::string& name = "dummy",
                            size_t stack_size = 2048) {
     using Callable_decay_t = std::decay_t<Callable>;
