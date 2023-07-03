@@ -1,6 +1,3 @@
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
-
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -8,50 +5,63 @@
 
 #include "freertos/portmacro.h"
 
+
 namespace frpp {
+  using native_handle_type = void*;
+  namespace detail {
+    native_handle_type create(void fun(void*), const std::string&,
+                              std::size_t stack_size,
+                              void* cookie,
+                              uint32_t priority,
+                              uint32_t affinity);
+
+    void delete_current_task();
+  }
+
   class task {
-    TaskHandle_t p_;
+    native_handle_type p_{};
+
+
 
   public:
-    explicit task(TaskHandle_t rawtask) : p_(rawtask) {}
-    void suspend() { vTaskSuspend(p_); }
-    void resume() { vTaskResume(p_); }
-    void del() { vTaskDelete(p_); p_ = nullptr;}
-    ~task() {
-      if (p_) del();
-    }
+    explicit task(native_handle_type rawtask) : p_{rawtask} {}
+    task(const task&) = delete;
+    task& operator=(const task&) = delete;
+    task(task&&) = default;
+    task& operator=(task&&) = default;
+
+    void suspend();
+    void resume();
+    ~task();
   };
+
 
   template <class Callable>
   [[nodiscard]] task async(Callable&& f, size_t priority = 1,
-                           std::string name = "dummy",
-                           size_t stack_depth = 2048) {
+                           const std::string& name = "dummy",
+                           size_t stack_size = 2048) {
     using Callable_decay_t = std::decay_t<Callable>;
-    Callable_decay_t* ptr = new Callable_decay_t(std::forward<Callable>(f));
-    TaskHandle_t rawtask{};
+    auto ptr = std::make_unique<Callable_decay_t>(std::forward<Callable>(f));
     auto fun = [](void* cookie) {
       try {
         std::unique_ptr<Callable_decay_t> pf{
             static_cast<Callable_decay_t*>(cookie)};
         (*pf)();
       } catch (std::exception& e) {
-        fprintf(stderr, "Task '%s' caught '%s'\n", pcTaskGetName(xTaskGetCurrentTaskHandle()), e.what());
+        // fprintf(stderr, "Task '%s' caught '%s'\n", pcTaskGetName(xTaskGetCurrentTaskHandle()), e.what());
+        fprintf(stderr, "Task threw '%s'", e.what());
       }
-      vTaskDelete(NULL);
+      detail::delete_current_task();
     };
-    auto retval = xTaskCreatePinnedToCore(fun, name.c_str(), stack_depth, ptr,
-                                          priority, &rawtask, 1);
-    if (!retval) {
-      delete ptr;
-      throw std::runtime_error("xTaskCreate() failed!");
-    }
-    return task(rawtask);
+    return task(detail::create(fun, name, stack_size, ptr.get(), priority, 1));
   }
 
-  template< class Rep, class Period >
+  void sleep_for_ticks(std::size_t ticks);
+  extern const std::size_t milliseconds_in_a_tick_period;
 
+  template< class Rep, class Period >
   void sleep_for(const std::chrono::duration<Rep, Period>& sleep_duration) {
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(sleep_duration);
-    vTaskDelay(ms.count()/portTICK_PERIOD_MS);
+    sleep_for_ticks(ms.count()/milliseconds_in_a_tick_period);
   }
 }  // namespace frpp
