@@ -9,7 +9,8 @@
 namespace frpp {
   using native_handle_type = void*;
   namespace detail {
-    native_handle_type create(void fun(void*), const std::string&,
+    native_handle_type create(void (*fun)(void*),
+                              const std::string& name,
                               std::size_t stack_size,
                               void* cookie,
                               uint32_t priority,
@@ -53,7 +54,7 @@ namespace frpp {
       }
       detail::delete_current_task();
     };
-    auto retval=task(detail::create(fun, name, stack_size, ptr.get(), priority, 1));
+    task retval{detail::create(fun, name, stack_size, ptr.get(), priority, 1)};
     ptr.release();
     return retval;
   }
