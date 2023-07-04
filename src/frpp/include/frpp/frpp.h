@@ -17,6 +17,8 @@ namespace frpp {
                               uint32_t affinity);
 
     void delete_current_task();
+
+    void sleep_for_ms(std::chrono::milliseconds ms);
   }
 
   class task {
@@ -59,12 +61,8 @@ namespace frpp {
     return retval;
   }
 
-  void sleep_for_ticks(std::size_t ticks);
-  extern const std::size_t milliseconds_in_a_tick_period;
-
   template< class Rep, class Period >
   void sleep_for(const std::chrono::duration<Rep, Period>& sleep_duration) {
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(sleep_duration);
-    sleep_for_ticks(ms.count()/milliseconds_in_a_tick_period);
+    detail::sleep_for_ms(sleep_duration);
   }
 }  // namespace frpp
