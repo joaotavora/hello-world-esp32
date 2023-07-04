@@ -38,7 +38,7 @@ extern "C" void app_main(void) {
   /* Set the GPIO as a push/pull output */
   gpio_set_direction(BLINK_GPIO, GPIO_MODE_OUTPUT);
 
-  auto blink_period=1000ms;
+  std::chrono::milliseconds blink_period=1s;
 
   auto t1 = frpp::async([&]{
     uint16_t s_led_state = 0;
